@@ -8,7 +8,26 @@ npm install form-parser --save
 
 # Examples
 
-## Basic
+## Using [micro](https://github.com/zeit/micro):
+```js
+// Dependencies
+const parser = require('form-parser')
+const { send } = require('micro')
+
+// Create server
+module.exports = async (req, res) => {
+  // Parse request
+  await parser(req, async field => {
+    // Log info
+    console.log(field) // { fieldType, fieldName, fieldContent }
+  })
+
+  // Reply with finished
+  return send(res, 200, 'Parsing form succeded.')
+}
+```
+
+## Native HTTP server:
 ```js
 // Dependencies
 const http = require('http')
@@ -19,9 +38,9 @@ const server = http.createServer(async (req, res) => {
   // Wrap in try/catch block
   try {
     // Parse request
-    await parser(req, async ({ fieldType, fieldName, fieldContent }) => {
+    await parser(req, async field => {
       // Log info
-      console.log({ fieldType, fieldName, fieldContent })
+      console.log(field) // { fieldType, fieldName, fieldContent }
     })
   
   // Catch errors
@@ -44,7 +63,7 @@ server.listen(3000, () => {
 })
 ```
 
-## Streaming file upload
+## Streaming file upload:
 ```js
 // Dependencies
 const http = require('http')
@@ -56,27 +75,29 @@ const fs = require('fs')
 const server = http.createServer(async (req, res) => {
   try {
     // Parse request
-    await parser(req, async ({ fieldType, fieldName, fieldContent }) => {
-      // Log info
-      console.log({ fieldType, fieldName, fieldContent })
-
-      // Handle files
-      if (fieldType === 'file') {
-        // Get file info
-        const { fileName, fileType, fileStream } = fieldContent
-
-        // Prepare write stream
-        const writeFilePath = path.resolve(__dirname, 'files', fileName)
-        const writeFileStream = fs.createWriteStream(writeFilePath)
-
-        // Write file to disk
-        await new Promise((resolve, reject) => {
-          fileStream.pipe(writeFileStream).on('error', reject).on('finish', resolve)
-        })
-
-        // Log info
-        console.log(`${fileName} has been written to disk.`)
+    await parser(req, async field => {
+      // Get info
+      const { fieldType, fieldName, fieldContent } = field
+      
+      // Only handle files
+      if (fieldType !== 'file') {
+        return
       }
+
+      // Get file info
+      const { fileName, fileType, fileStream } = fieldContent
+
+      // Prepare write stream
+      const writeFilePath = path.resolve(__dirname, 'files', fileName)
+      const writeFileStream = fs.createWriteStream(writeFilePath)
+
+      // Write file to disk
+      await new Promise((resolve, reject) => {
+        fileStream.pipe(writeFileStream).on('error', reject).on('finish', resolve)
+      })
+
+      // Log info
+      console.log(`${fileName} has been written to disk.`)
     })
   
   // Catch errors
