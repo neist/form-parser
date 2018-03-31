@@ -1,6 +1,6 @@
 {
   "name": "form-parser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A streaming and asynchronous multipart/form-data parser.",
   "main": "index.js",
   "keywords": [
