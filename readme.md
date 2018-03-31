@@ -104,15 +104,15 @@ server.listen(3000, () => {
 ## `parser(req, callback)`
 The `parser()` function is a top-level function exported by the `form-parser` module.
 
-* `req` The request object.
-* `callback(field => {})` An Async function, that's called for each new form field found.
+* `req` HTTP request object.
+* `callback(field => {})` An Async function, that's called for each new form field found. Passes `field` as argument.
 
-`field` Is an object containing the field information.
-  * `fieldType` One of 'text' or 'file'.
-  * `fieldName` The field name specified in the form.
-  * `fieldContent` The field content received.
-    * If `fieldType` is 'text', `fieldContent` will contain the field value.
+`field` Is an object containing the following keys:
+  * `fieldType` The field type (one of 'text' or 'file').
+  * `fieldName` The field name.
+  * `fieldContent` The field content.
+    * If `fieldType` is 'text', `fieldContent` will contain the field text value.
     * If `fieldType` is 'file', `fieldContent` will contain an object with the following keys:
       * `fileName` The name of the file.
-      * `fileType` Mime type of the file.
-      * `fileStream` A ReadableStream.
+      * `fileType` The mime type of the file.
+      * `fileStream` The file stream (ReadableStream).
