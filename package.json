@@ -1,0 +1,20 @@
+{
+  "name": "form-parser",
+  "version": "0.1.0",
+  "description": "A streaming and asynchronous multipart/form-data parser.",
+  "main": "index.js",
+  "keywords": [
+    "uploads",
+    "forms",
+    "post",
+    "multipart",
+    "form-data",
+    "formdata",
+    "streams"
+  ],
+  "author": "Kasper Neist <kasper@neist.com>",
+  "license": "MIT",
+  "dependencies": {
+    "busboy": "^0.2.14"
+  }
+}
