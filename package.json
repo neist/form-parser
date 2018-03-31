@@ -13,6 +13,9 @@
     "streams"
   ],
   "author": "Kasper Neist <kasper@neist.com>",
+  "bugs": "https://github.com/neist/form-parser/issues",
+  "repository": "neist/form-parser",
+  "homepage": "https://github.com/neist/form-parser/",
   "license": "MIT",
   "dependencies": {
     "busboy": "^0.2.14"
